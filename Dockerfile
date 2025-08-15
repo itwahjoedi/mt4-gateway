@@ -23,10 +23,10 @@ rm mt4setup.exe
 WORKDIR /app
 
 # Copy EA source
-COPY mql4 /root/.wine/drive_c/Program\ Files/MetaTrader\ 4/MQL4/
+# COPY mql4 /root/.wine/drive_c/Program\ Files/MetaTrader\ 4/MQL4/
 
 # Compile EA
-RUN wine "C:/Program Files/MetaTrader 4/metaeditor.exe" /compile:"C:/Program Files/MetaTrader 4/MQL4/Experts/HelloLogger.mq4"
+# RUN wine "C:/Program Files/MetaTrader 4/metaeditor.exe" /compile:"C:/Program Files/MetaTrader 4/MQL4/Experts/HelloLogger.mq4"
 
 # Copy and set entry script
 COPY run_mt4.sh /app/run_mt4.sh
