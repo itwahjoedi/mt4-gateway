@@ -12,13 +12,15 @@ apt-get install -y --no-install-recommends \
 wine winbind cabextract wget unzip xvfb && \
 rm -rf /var/lib/apt/lists/*
 
-# Install MT4
+# Copy MT4 installer from repository
+COPY exe/mt4setup.exe /opt/mt4/mt4setup.exe
+
+# Install MT4 using local installer
 RUN mkdir -p /opt/mt4 && \
-cd /opt/mt4 && \
-wget -q https://download.mql5.com/cdn/web/metaquotes.software.corp/mt4/mt4setup.exe 
-#&& \
-#xvfb-run wine mt4setup.exe /S && \
-#rm mt4setup.exe
+    cd /opt/mt4 && \
+    xvfb-run wine mt4setup.exe /S && \
+    rm mt4setup.exe
+
 
 # Set working directory
 WORKDIR /app

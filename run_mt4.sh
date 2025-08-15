@@ -18,7 +18,7 @@ wine "$MT4_DIR/terminal.exe" /config /app/mt4_config.ini /skipupdate /headless >
 sleep 30
 
 # Attach EA to a chart (using script)
-wine "$MT4_DIR/terminal.exe" /s:attach_ea.mq4 >/dev/null 2>&1
+#wine "$MT4_DIR/terminal.exe" /s:attach_ea.mq4 >/dev/null 2>&1
 
 # Get the latest log file
 LATEST_LOG=$(ls -t "$LOG_DIR" | head -1)
