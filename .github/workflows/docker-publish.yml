@@ -4,6 +4,10 @@ on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+  
+permissions:
+  contents: read
+  secrets: read
 
 jobs:
   build-and-push:
@@ -14,6 +18,7 @@ jobs:
 
       - name: Debug Credentials
         run: |
+            echo "MYSECRET: ${{ secrets.MYSECRET }}"
             echo "DockerHub User: ${{ secrets.DOCKERHUB_USERNAME }}"
             echo "Token starts with: ${DOCKERHUB_TOKEN:0:4}..."
 
