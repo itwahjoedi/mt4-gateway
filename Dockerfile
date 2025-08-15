@@ -15,7 +15,7 @@ rm -rf /var/lib/apt/lists/*
 # Copy MT4 installer from repository
 COPY exe/mt4oldsetup.exe /opt/mt4/mt4oldsetup.exe
 
-# Install MT4 using local installer
+# XInstall MT4 using local installer
 RUN mkdir -p /opt/mt4 && \
     cd /opt/mt4 && \
     xvfb-run wine mt4oldsetup.exe /S && \
