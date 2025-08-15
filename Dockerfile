@@ -9,7 +9,7 @@ ENV DISPLAY=:0
 # Install dependencies
 RUN apt-get update && \
 apt-get install -y --no-install-recommends \
-wine winbind cabextract wget unzip xvfb && \
+wine winbind cabextract wget unzip xvfb xauth && \
 rm -rf /var/lib/apt/lists/*
 
 # Copy MT4 installer from repository
