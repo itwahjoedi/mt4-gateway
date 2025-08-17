@@ -26,8 +26,7 @@ RUN apt-get update && \
     winbind cabextract wget unzip xvfb xauth \
     ca-certificates \
     curl \
-    libvulkan1 \
-    winehq-staging && \
+    libvulkan1 && \
     rm -rf /var/lib/apt/lists/*
 
 
