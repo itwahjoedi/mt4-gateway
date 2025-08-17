@@ -24,7 +24,7 @@ ENV XAUTHORITY=/tmp/.Xauthority
 
 RUN \
   dpkg --add-architecture i386 && apt-get update -y && 
-    apt-get install -y --no-install-recommends \
+    apt install -y --no-install-recommends \
     ca-certificates \
     curl \
     libvulkan1 \
