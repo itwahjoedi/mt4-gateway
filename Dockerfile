@@ -21,13 +21,22 @@ ENV DISPLAY=:0
 ENV XAUTHORITY=/tmp/.Xauthority
 
 # Install dependencies untuk Wine 64-bit
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    winbind cabextract wget unzip xvfb xauth \
-    ca-certificates \
-    curl \
-    libvulkan1 && \
-    rm -rf /var/lib/apt/lists/*
+
+RUN \
+	dpkg --add-architecture i386 \
+	&& apt-get update -y \
+	&& apt-get install -y --no-install-recommends \
+		ca-certificates \
+		curl \
+		libvulkan1 \
+		unzip \
+		xauth \
+		xvfb \
+		wget \
+		winbind \
+		cabextract \
+	&& apt-get clean \
+	&& rm -rf /var/lib/apt/lists/*
 
 
 # Setup Wine untuk 64-bit
