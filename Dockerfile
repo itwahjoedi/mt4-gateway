@@ -23,6 +23,21 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         curl gnupg ca-certificates
 
+# 2. Tambahkan repositori WineHQ (Bullseye) dengan pinning
+RUN curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /usr/share/keyrings/winehq.gpg && \
+echo "deb [signed-by=/usr/share/keyrings/winehq.gpg] https://dl.winehq.org/wine-builds/debian/ bullseye main" > /etc/apt/sources.list.d/winehq.list && \
+echo "Package: *\nPin: release n=bullseye\nPin-Priority: 500" > /etc/apt/preferences.d/wine.pref
+
+
+# 3. Install Wine (64-bit only)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        winehq-staging && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+
+
 #RUN dpkg --add-architecture i386 && \
 #  apt-get update -y && \
 #  apt-get install -y --no-install-recommends \
@@ -67,16 +82,16 @@ RUN apt-get update && \
 #CMD ["/app/run_mt4.sh"]
 
 
-ARG WINE_FLAVOUR=staging
+#ARG WINE_FLAVOUR=staging
 
-RUN \
-	/tmp/fix-xvfb.sh \
-	&& sed -i '/^Enabled:/ s/no/yes/' /etc/apt/sources.list.d/* \
-	&& apt-get update -y \
-	&& apt-get install -y --no-install-recommends \
-		winehq-${WINE_FLAVOUR} \
-	&& apt-get clean \
-	&& rm -rf /var/lib/apt/lists/*
+#RUN \
+#	/tmp/fix-xvfb.sh \
+#	&& sed -i '/^Enabled:/ s/no/yes/' /etc/apt/sources.list.d/* \
+#	&& apt-get update -y \
+#	&& apt-get install -y --no-install-recommends \
+#		winehq-${WINE_FLAVOUR} \
+#	&& apt-get clean \
+#	&& rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["/tini", "--"]
 CMD ["/bin/bash"]
