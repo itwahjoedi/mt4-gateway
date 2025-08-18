@@ -19,22 +19,32 @@ ENV WINEDEBUG=-all
 ENV DISPLAY=:0
 ENV XAUTHORITY=/tmp/.Xauthority
 
-# 1. Setup environment dan disable interactive prompts
-ENV DEBIAN_FRONTEND=noninteractive
+# Update sistem dan install dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    gnupg2 \
+    software-properties-common \
+    apt-transport-https \
+    ca-certificates \
+    sudo \
+    && rm -rf /var/lib/apt/lists/*
 
-# 2. Install dependencies dasar + WineHQ Stable 64-bit
-RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends \
+# Tambahkan repository Wine
+RUN wget -nv -O- https://dl.winehq.org/wine-builds/winehq.key | apt-key add - \
+    && echo "deb https://dl.winehq.org/wine-builds/debian/ bullseye main" >> /etc/apt/sources.list.d/winehq.list
+
+# Install Wine dan dependencies
+RUN dpkg --add-architecture i386 \
+    && apt-get update \
+    && apt-get install -y \
+        winehq-stable \
+        winetricks \
+        cabextract \
+        unzip \
+        p7zip \
         curl \
-        gnupg \
-        ca-certificates && \
-    curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /usr/share/keyrings/winehq.gpg && \
-    echo "deb [signed-by=/usr/share/keyrings/winehq.gpg] https://dl.winehq.org/wine-builds/debian/ bullseye main" > /etc/apt/sources.list.d/winehq.list && \
-    apt-get update -y && \
-    apt-get install -y --no-install-recommends \
-        winehq-stable && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+        xvfb \
+    && rm -rf /var/lib/apt/lists/*
 
 
 # 4. Inisialisasi Wine (tanpa GUI)
