@@ -11,8 +11,6 @@ ARG TINI_VERSION=0.19.0
 ADD https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
 
-COPY apt /etc/apt
-
 # Set environment variables
 ENV WINEARCH=win64
 ENV WINEPREFIX=~/.wine64
@@ -21,8 +19,9 @@ ENV DISPLAY=:0
 ENV XAUTHORITY=/tmp/.Xauthority
 
 # Install dependencies untuk Wine 64-bit
-
-RUN apt-get update -y
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        curl gnupg ca-certificates
 
 #RUN dpkg --add-architecture i386 && \
 #  apt-get update -y && \
