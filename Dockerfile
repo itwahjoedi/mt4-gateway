@@ -35,6 +35,9 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
+# 4. Inisialisasi Wine (tanpa GUI)
+RUN wineboot --init && \
+    wineserver --wait
 
 
 #RUN dpkg --add-architecture i386 && \
