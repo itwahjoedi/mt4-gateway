@@ -17,7 +17,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV WINE_USER=wineuser
 ENV WINE_UID=1000
 ENV WINE_GID=1000
-ENV WINEPREFIX=/home/${WINE_USER}/.wine
+ENV WINEPREFIX=/home/${WINE_USER}/.wine64
 ENV WINEARCH=win64
 ENV DISPLAY=:0
 ENV WINEDEBUG=-all
@@ -55,6 +55,10 @@ RUN dpkg --add-architecture i386 \
 RUN wget -O /usr/local/bin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
     && chmod +x /usr/local/bin/winetricks
 
+# Copy dan setup fix-xvfb script
+COPY fix-xvfb.sh /tmp/fix-xvfb.sh
+RUN chmod +x /tmp/fix-xvfb.sh && /tmp/fix-xvfb.sh
+
 # Buat user non-root
 RUN groupadd -g ${WINE_GID} ${WINE_USER} \
     && useradd -u ${WINE_UID} -g ${WINE_GID} -m -s /bin/bash ${WINE_USER} \
@@ -64,21 +68,9 @@ RUN groupadd -g ${WINE_GID} ${WINE_USER} \
 USER ${WINE_USER}
 WORKDIR /home/${WINE_USER}
 
-
-# Setup Wine untuk 64-bit
-#RUN wine wineboot --init
-
-# Copy MT4 installer from repository
-#COPY exe/mt4setup.exe /opt/mt4/mt4setup.exe
-
-# Install MT4 using local installer
-#RUN mkdir -p /opt/mt4 && \
-#    cd /opt/mt4 && \
-#    xvfb-run wine mt4setup.exe /S && \
-#    rm mt4setup.exe
-
-# Set working directory
-#WORKDIR /app
+# 4. Inisialisasi Wine (tanpa GUI)
+RUN wineboot --init && \
+    wineserver --wait
 
 # Copy EA source
 # COPY mql4 /root/.wine/drive_c/Program\ Files/MetaTrader\ 4/MQL4/
@@ -91,18 +83,6 @@ WORKDIR /home/${WINE_USER}
 #RUN chmod +x /app/run_mt4.sh
 
 #CMD ["/app/run_mt4.sh"]
-
-
-#ARG WINE_FLAVOUR=staging
-
-#RUN \
-#	/tmp/fix-xvfb.sh \
-#	&& sed -i '/^Enabled:/ s/no/yes/' /etc/apt/sources.list.d/* \
-#	&& apt-get update -y \
-#	&& apt-get install -y --no-install-recommends \
-#		winehq-${WINE_FLAVOUR} \
-#	&& apt-get clean \
-#	&& rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT ["/tini", "--"]
 CMD ["/bin/bash"]
