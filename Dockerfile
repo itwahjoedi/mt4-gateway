@@ -1,6 +1,7 @@
 # Dockerfile
 
-FROM debian:bookworm
+FROM debian:bullseye-slim
+
 LABEL org.opencontainers.image.authors="Indra Wahjoedi <iw@ijoe.eu.org>"
 
 ENV DEBIAN_FRONTEND=noninteractive
@@ -23,11 +24,9 @@ RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         curl gnupg ca-certificates
 
-# 2. Tambahkan repositori WineHQ (Bullseye) dengan pinning
+# 2. Tambahkan repositori WineHQ
 RUN curl -fsSL https://dl.winehq.org/wine-builds/winehq.key | gpg --dearmor -o /usr/share/keyrings/winehq.gpg && \
-echo "deb [signed-by=/usr/share/keyrings/winehq.gpg] https://dl.winehq.org/wine-builds/debian/ bullseye main" > /etc/apt/sources.list.d/winehq.list && \
-echo "Package: *\nPin: release n=bullseye\nPin-Priority: 500" > /etc/apt/preferences.d/wine.pref
-
+    echo "deb [signed-by=/usr/share/keyrings/winehq.gpg] https://dl.winehq.org/wine-builds/debian/ bullseye main" > /etc/apt/sources.list.d/winehq.list
 
 # 3. Install Wine (64-bit only)
 RUN apt-get update && \
