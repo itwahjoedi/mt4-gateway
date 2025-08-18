@@ -13,10 +13,14 @@ ADD https://github.com/krallin/tini/releases/download/v${TINI_VERSION}/tini /tin
 RUN chmod +x /tini
 
 # Set environment variables
+ENV DEBIAN_FRONTEND=noninteractive
+ENV WINE_USER=wineuser
+ENV WINE_UID=1000
+ENV WINE_GID=1000
+ENV WINEPREFIX=/home/${WINE_USER}/.wine
 ENV WINEARCH=win64
-ENV WINEPREFIX=~/.wine64
-ENV WINEDEBUG=-all
 ENV DISPLAY=:0
+ENV WINEDEBUG=-all
 ENV XAUTHORITY=/tmp/.Xauthority
 
 # Update sistem dan install dependencies
@@ -44,6 +48,15 @@ RUN dpkg --add-architecture i386 \
         curl \
         xvfb \
     && rm -rf /var/lib/apt/lists/*
+
+# Buat user non-root
+RUN groupadd -g ${WINE_GID} ${WINE_USER} \
+    && useradd -u ${WINE_UID} -g ${WINE_GID} -m -s /bin/bash ${WINE_USER} \
+    && echo "${WINE_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Switch ke user non-root
+USER ${WINE_USER}
+WORKDIR /home/${WINE_USER}
 
 
 #
