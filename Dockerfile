@@ -46,10 +46,6 @@ RUN dpkg --add-architecture i386 \
     && rm -rf /var/lib/apt/lists/*
 
 
-# Buat user non-root
-RUN groupadd -g ${WINE_GID} ${WINE_USER} \
-    && useradd -u ${WINE_UID} -g ${WINE_GID} -m -s /bin/bash ${WINE_USER} \
-    && echo "${WINE_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 #
 #RUN dpkg --add-architecture i386 && \
