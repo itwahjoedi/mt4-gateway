@@ -45,9 +45,6 @@ RUN dpkg --add-architecture i386 \
         xvfb \
     && rm -rf /var/lib/apt/lists/*
 
-# Download winetricks secara manual
-RUN wget -O /usr/local/bin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
-    && chmod +x /usr/local/bin/winetricks
 
 # Buat user non-root
 RUN groupadd -g ${WINE_GID} ${WINE_USER} \
