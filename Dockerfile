@@ -47,40 +47,22 @@ RUN dpkg --add-architecture i386 \
         p7zip \
         curl \
         xvfb \
+        winbind \
+        libvulkan1 \
     && rm -rf /var/lib/apt/lists/*
 
 # Download winetricks secara manual
 RUN wget -O /usr/local/bin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
     && chmod +x /usr/local/bin/winetricks
 
-
 # Buat user non-root
 RUN groupadd -g ${WINE_GID} ${WINE_USER} \
     && useradd -u ${WINE_UID} -g ${WINE_GID} -m -s /bin/bash ${WINE_USER} \
     && echo "${WINE_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-
-
 # Switch ke user non-root
 USER ${WINE_USER}
 WORKDIR /home/${WINE_USER}
-
-
-#
-#RUN dpkg --add-architecture i386 && \
-#  apt-get update -y && \
-#  apt-get install -y --no-install-recommends \
-#    ca-certificates \
-#    curl \
-#    libvulkan1 \
-#    unzip \
-#    xauth \
-#    xvfb \
-#    wget \
-#   winbind \
-#   cabextract && \
-#   apt-get clean && \
-#   rm -rf /var/lib/apt/lists/*
 
 
 # Setup Wine untuk 64-bit
