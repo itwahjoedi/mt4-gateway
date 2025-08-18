@@ -23,7 +23,6 @@ ENV XAUTHORITY=/tmp/.Xauthority
 # Install dependencies untuk Wine 64-bit
 
 RUN \
-dpkg --add-architecture i386 && \
   apt-get update -y && \
   apt-get install -y --no-install-recommends \
     ca-certificates \
