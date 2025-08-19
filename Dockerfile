@@ -24,6 +24,9 @@ ENV DISPLAY=:0
 ENV WINEDEBUG=-all
 ENV XAUTHORITY=/tmp/.Xauthority
 
+# Fix memory mapping issue
+RUN echo 0 > /proc/sys/vm/mmap_min_addr
+
 # Update sistem dan install dependencies
 RUN apt-get update && apt-get install -y \
     wget \
