@@ -29,6 +29,7 @@ ENV WINE_LARGE_ADDRESS_AWARE=
 ENV WINEDLLOVERRIDES="winemenubuilder.exe=d"
 ENV WINEFSYNC=0
 ENV WINEESYNC=0
+ENV WINELOADERNOEXEC=1
 
 # Update sistem dan install dependencies
 RUN apt-get update && apt-get install -y \
@@ -49,6 +50,8 @@ RUN dpkg --add-architecture i386 \
     && apt-get update \
     && apt-get install -y \
         winehq-stable \
+        wine64 \
+        winbind \
         cabextract \
         unzip \
         p7zip \
