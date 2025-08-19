@@ -23,8 +23,12 @@ ENV DISPLAY=:0
 ENV WINEDEBUG=-all
 ENV XAUTHORITY=/tmp/.Xauthority
 
-# Fix memory mapping issue
-RUN echo 0 > /proc/sys/vm/mmap_min_addr
+# Jelastic Compatibility
+ENV WINEPRELOADER=/bin/false
+ENV WINE_LARGE_ADDRESS_AWARE=
+ENV WINEDLLOVERRIDES="winemenubuilder.exe=d"
+ENV WINEFSYNC=0
+ENV WINEESYNC=0
 
 # Update sistem dan install dependencies
 RUN apt-get update && apt-get install -y \
@@ -52,11 +56,23 @@ RUN dpkg --add-architecture i386 \
         xvfb \
         winbind \
         libvulkan1 \
+        openssh-server \
+        supervisor \
+        procps \
+        psmisc \
     && rm -rf /var/lib/apt/lists/*
 
 # Download winetricks secara manual
 RUN wget -O /usr/local/bin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
     && chmod +x /usr/local/bin/winetricks
+
+# Jelastic compatibility fixes
+RUN echo 'kernel.yama.ptrace_scope = 0' >> /etc/sysctl.conf \
+    && mkdir -p /etc/security/limits.d \
+    && echo 'wineuser soft nofile 65536' >> /etc/security/limits.d/wine.conf \
+    && echo 'wineuser hard nofile 65536' >> /etc/security/limits.d/wine.conf
+
+
 
 # Copy dan setup fix-xvfb script
 COPY fix-xvfb.sh /tmp/fix-xvfb.sh
