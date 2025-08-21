@@ -84,11 +84,10 @@ USER ${WINE_USER}
 WORKDIR /home/${WINE_USER}
 
 # MT5
-RUN curl -L -o "Pepperstone-MetaTrader-5.zip" "https://www.dropbox.com/scl/fi/3ko8xl4p9xqeuv793285j/Pepperstone-MetaTrader-5.zip?rlkey=qu18epr8d6v3daxld5y42c6dw&st=3oup3pfx&dl=1"
-RUN unzip Pepperstone-MetaTrader-5.zip -d mt5
-
-# Copy 
-COPY mt5 /home/wineuser/.wine64/drive_c/Program\ Files/MetaTrader\ 5
+RUN curl -L -o "Pepperstone-MetaTrader-5.zip" "https://www.dropbox.com/scl/fi/3ko8xl4p9xqeuv793285j/Pepperstone-MetaTrader-5.zip?rlkey=qu18epr8d6v3daxld5y42c6dw&st=3oup3pfx&dl=1" && \
+    unzip Pepperstone-MetaTrader-5.zip -d mt5 
+    
+   
 
 # Compile EA
 # RUN wine "C:/Program Files/MetaTrader 4/metaeditor.exe" /compile:"C:/Program Files/MetaTrader 4/MQL4/Experts/HelloLogger.mq4"
@@ -97,6 +96,8 @@ COPY mt5 /home/wineuser/.wine64/drive_c/Program\ Files/MetaTrader\ 5
 RUN wineboot --init && \
     wineserver --wait
 
+# Install MT5
+RUN mv mt5 /home/wineuser/.wine64/drive_c/Program\ Files/MetaTrader\ 5
 # Copy and set entry script
 COPY setup-wine.sh /app/setup-wine.sh
 RUN chmod +x /app/setup-wine.sh
