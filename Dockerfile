@@ -88,7 +88,7 @@ RUN curl -L -o "Pepperstone-MetaTrader-5.zip" "https://www.dropbox.com/scl/fi/3k
 RUN unzip Pepperstone-MetaTrader-5.zip -d mt5
 
 # Copy 
-COPY mt5 /home/wineuser/.wine64/drive_c/Program\ Files/MetaTrader\ 5/ && rm -rf mt5
+COPY mt5 /home/wineuser/.wine64/drive_c/Program\ Files/MetaTrader\ 5/ && rm -rf /home/wineuser/mt5
 
 # Compile EA
 # RUN wine "C:/Program Files/MetaTrader 4/metaeditor.exe" /compile:"C:/Program Files/MetaTrader 4/MQL4/Experts/HelloLogger.mq4"
