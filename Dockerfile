@@ -98,13 +98,14 @@ RUN wineboot --init && \
 
 # Install MT5
 RUN mv mt5 /home/wineuser/.wine64/drive_c/Program\ Files/MetaTrader\ 5
+
 # Copy and set entry script
-COPY setup-wine.sh /app/setup-wine.sh
-RUN chmod +x /app/setup-wine.sh
-COPY run_mt4.sh /app/run_mt4.sh
-RUN chmod +x /app/run_mt4.sh
-COPY run_mt5.sh /app/run_mt5.sh
-RUN chmod +x /app/run_mt5.sh
+COPY setup-wine.sh /home/wineuser/app/setup-wine.sh
+RUN chmod +x /home/wineuser/app/setup-wine.sh
+COPY run_mt4.sh /home/wineuser/app/run_mt4.sh
+RUN chmod +x /home/wineuser/app/run_mt4.sh
+COPY run_mt5.sh /home/wineuser/app/run_mt5.sh
+RUN chmod +x /home/wineusee/app/run_mt5.sh
 
 CMD /app/setup-wine.sh
 #CMD ["/app/run_mt4.sh"]
