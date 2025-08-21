@@ -69,13 +69,6 @@ RUN dpkg --add-architecture i386 \
 RUN wget -O /usr/local/bin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
     && chmod +x /usr/local/bin/winetricks
 
-# Jelastic compatibility fixes
-RUN echo 'kernel.yama.ptrace_scope = 0' >> /etc/sysctl.conf \
-    && mkdir -p /etc/security/limits.d \
-    && echo 'wineuser soft nofile 65536' >> /etc/security/limits.d/wine.conf \
-    && echo 'wineuser hard nofile 65536' >> /etc/security/limits.d/wine.conf
-
-
 
 # Copy dan setup fix-xvfb script
 COPY fix-xvfb.sh /tmp/fix-xvfb.sh
@@ -90,20 +83,27 @@ RUN groupadd -g ${WINE_GID} ${WINE_USER} \
 USER ${WINE_USER}
 WORKDIR /home/${WINE_USER}
 
-# 4. Inisialisasi Wine (tanpa GUI)
-RUN wineboot --init && \
-    wineserver --wait
+# MT5
+RUN curl -L -o "Pepperstone-MetaTrader-5.zip" "https://www.dropbox.com/scl/fi/3ko8xl4p9xqeuv793285j/Pepperstone-MetaTrader-5.zip?rlkey=qu18epr8d6v3daxld5y42c6dw&st=3oup3pfx&dl=1"
+RUN unzip Pepperstone-MetaTrader-5.zip -d mt5
 
-# Copy EA source
-# COPY mql4 /root/.wine/drive_c/Program\ Files/MetaTrader\ 4/MQL4/
+# Copy 
+COPY mt5 /root/.wine64/drive_c/Program\ Files/MetaTrader\ 5/ && rm -rf mt5
 
 # Compile EA
 # RUN wine "C:/Program Files/MetaTrader 4/metaeditor.exe" /compile:"C:/Program Files/MetaTrader 4/MQL4/Experts/HelloLogger.mq4"
 
-# Copy and set entry script
-#COPY run_mt4.sh /app/run_mt4.sh
-#RUN chmod +x /app/run_mt4.sh
+# Inisialisasi Wine (tanpa GUI)
+RUN wineboot --init && \
+    wineserver --wait
 
+# Copy and set entry script
+COPY setup-wine.sh /app/setup-wine.sh
+RUN chmod +x /app/setup-wine.sh
+COPY run_mt4.sh /app/run_mt4.sh
+RUN chmod +x /app/run_mt4.sh
+
+CMD /app/setup-wine.sh
 #CMD ["/app/run_mt4.sh"]
 
 ENTRYPOINT ["/tini", "--"]
