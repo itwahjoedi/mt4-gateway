@@ -80,12 +80,12 @@ RUN groupadd -g ${WINE_GID} ${WINE_USER} \
     && echo "${WINE_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 # Copy and set entry script
-COPY setup-wine.sh /home/wineuser/app/setup-wine.sh
-RUN chmod +x /home/wineuser/app/setup-wine.sh
-COPY run_mt4.sh /home/wineuser/app/run_mt4.sh
-RUN chmod +x /home/wineuser/app/run_mt4.sh
-COPY run_mt5.sh /home/wineuser/app/run_mt5.sh
-RUN chmod +x /home/wineuser/app/run_mt5.sh
+COPY setup-wine.sh setup-wine.sh
+RUN chmod +x setup-wine.sh
+COPY run_mt4.sh run_mt4.sh
+RUN chmod +x run_mt4.sh
+COPY run_mt5.sh run_mt5.sh
+RUN chmod +x run_mt5.sh
 
 
 # Switch ke user non-root
