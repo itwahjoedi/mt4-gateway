@@ -79,6 +79,15 @@ RUN groupadd -g ${WINE_GID} ${WINE_USER} \
     && useradd -u ${WINE_UID} -g ${WINE_GID} -m -s /bin/bash ${WINE_USER} \
     && echo "${WINE_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
+# Copy and set entry script
+COPY setup-wine.sh /home/wineuser/app/setup-wine.sh
+RUN chmod +x /home/wineuser/app/setup-wine.sh
+COPY run_mt4.sh /home/wineuser/app/run_mt4.sh
+RUN chmod +x /home/wineuser/app/run_mt4.sh
+COPY run_mt5.sh /home/wineuser/app/run_mt5.sh
+RUN chmod +x /home/wineusee/app/run_mt5.sh
+
+
 # Switch ke user non-root
 USER ${WINE_USER}
 WORKDIR /home/${WINE_USER}
@@ -99,13 +108,7 @@ RUN wineboot --init && \
 # Install MT5
 RUN mv mt5 /home/wineuser/.wine64/drive_c/Program\ Files/MetaTrader\ 5
 
-# Copy and set entry script
-COPY setup-wine.sh /home/wineuser/app/setup-wine.sh
-RUN chmod +x /home/wineuser/app/setup-wine.sh
-COPY run_mt4.sh /home/wineuser/app/run_mt4.sh
-RUN chmod +x /home/wineuser/app/run_mt4.sh
-COPY run_mt5.sh /home/wineuser/app/run_mt5.sh
-RUN chmod +x /home/wineusee/app/run_mt5.sh
+
 
 CMD /app/setup-wine.sh
 #CMD ["/app/run_mt4.sh"]
