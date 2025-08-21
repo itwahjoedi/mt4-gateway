@@ -85,7 +85,7 @@ RUN chmod +x /home/wineuser/app/setup-wine.sh
 COPY run_mt4.sh /home/wineuser/app/run_mt4.sh
 RUN chmod +x /home/wineuser/app/run_mt4.sh
 COPY run_mt5.sh /home/wineuser/app/run_mt5.sh
-RUN chmod +x /home/wineusee/app/run_mt5.sh
+RUN chmod +x /home/wineuser/app/run_mt5.sh
 
 
 # Switch ke user non-root
