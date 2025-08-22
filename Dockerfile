@@ -85,12 +85,12 @@ USER ${WINE_USER}
 WORKDIR /home/${WINE_USER}
 
 # Copy and set entry script
-COPY setup-wine.sh setup-wine.sh
-RUN chmod +x setup-wine.sh
-COPY run_mt4.sh run_mt4.sh
-RUN chmod +x run_mt4.sh
-COPY run_mt5.sh run_mt5.sh
-RUN chmod +x run_mt5.sh
+COPY setup-wine.sh /home/${WINE_USER}/setup-wine.sh
+#RUN chmod +x setup-wine.sh
+COPY run_mt4.sh /home/${WINE_USER}/run_mt4.sh
+#RUN chmod +x run_mt4.sh
+COPY run_mt5.sh /home/${WINE_USER}/run_mt5.sh
+#RUN chmod +x run_mt5.sh
 
 # MT5
 RUN curl -L -o "Pepperstone-MetaTrader-5.zip" "https://www.dropbox.com/scl/fi/3ko8xl4p9xqeuv793285j/Pepperstone-MetaTrader-5.zip?rlkey=qu18epr8d6v3daxld5y42c6dw&st=3oup3pfx&dl=1" && \
